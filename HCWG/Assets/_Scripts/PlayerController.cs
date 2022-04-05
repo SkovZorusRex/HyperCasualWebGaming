@@ -39,71 +39,77 @@ public class PlayerController : MonoBehaviour
         if (m_path == null)
             m_path = FindObjectOfType<PathGenerator>();
         m_pathSize = m_path.size;
+
+        Debug.Log(Application.platform);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0 && m_enableInput)
+        if (Application.platform == RuntimePlatform.WebGLPlayer || Application.platform == RuntimePlatform.WindowsEditor)
         {
-            m_touch = Input.GetTouch(0);
-
-            if(m_controlType == ControlType.TapAndHold)
+            if (m_enableInput)
             {
-                if(m_touch.phase == TouchPhase.Began)
+                m_direction.y = Input.GetAxis("Horizontal");
+                m_child.transform.Translate(m_direction * m_speed * Time.deltaTime);
+                if (Mathf.Abs(m_child.transform.localPosition.y) > (m_pathSize / 2) + m_errorMargin)
                 {
-                    if(m_touch.position.x > Screen.width / 2)
-                    {
-                        m_direction.y = 1f;
-                    }
-                    else if(m_touch.position.x < Screen.width / 2)
-                    {
-                        m_direction.y = -1f;
-                    }
-                }
-                else if (m_touch.phase == TouchPhase.Stationary)
-                {
-                    m_child.transform.Translate(m_direction * m_speed * Time.deltaTime);
-                    if (Mathf.Abs(m_child.transform.localPosition.y) > (m_pathSize / 2) + m_errorMargin)
-                    {
-                        OnDeath();
-                    }
-                }
+                    OnDeath();
+                } 
             }
-
-            if (m_controlType == ControlType.HoldAndDrag)
+        }
+        else if (Application.platform == RuntimePlatform.Android)
+        {
+            if (Input.touchCount > 0 && m_enableInput)
             {
-                if (m_touch.phase == TouchPhase.Began)
-                {
-                    m_touchStartPosition = m_touch.position;
-                }
-                else if (m_touch.phase == TouchPhase.Moved || m_touch.phase == TouchPhase.Ended || m_touch.phase == TouchPhase.Stationary)
-                {
-                    m_touchEndPosition = m_touch.position;
+                m_touch = Input.GetTouch(0);
 
-                    float x = m_touchEndPosition.x - m_touchStartPosition.x;
-
-                    if (Mathf.Abs(x) >= 0.1f)
+                if (m_controlType == ControlType.TapAndHold)
+                {
+                    if (m_touch.phase == TouchPhase.Began)
                     {
-                        m_direction.y = Mathf.Clamp(x, -1f, 1f);
+                        if (m_touch.position.x > Screen.width / 2)
+                        {
+                            m_direction.y = 1f;
+                        }
+                        else if (m_touch.position.x < Screen.width / 2)
+                        {
+                            m_direction.y = -1f;
+                        }
+                    }
+                    else if (m_touch.phase == TouchPhase.Stationary)
+                    {
                         m_child.transform.Translate(m_direction * m_speed * Time.deltaTime);
                         if (Mathf.Abs(m_child.transform.localPosition.y) > (m_pathSize / 2) + m_errorMargin)
                         {
                             OnDeath();
                         }
-                        //var d = m_follower.motion.offset + new Vector2(0, m_direction.y * Time.deltaTime * m_speed);
-                        //if (Mathf.Abs(d.y) > (m_pathSize / 2) + 1)
-                        //{
-                        //    m_follower.follow = false;
-                        //    m_rigidbody.useGravity = true;
-                        //}
-                        //else
-                        //{
-                        //    d.y = Mathf.Clamp(d.y, -m_pathSize, m_pathSize);
-                        //    m_follower.motion.offset = d;
-                        //}
                     }
-                } 
+                }
+
+                if (m_controlType == ControlType.HoldAndDrag)
+                {
+                    if (m_touch.phase == TouchPhase.Began)
+                    {
+                        m_touchStartPosition = m_touch.position;
+                    }
+                    else if (m_touch.phase == TouchPhase.Moved || m_touch.phase == TouchPhase.Ended || m_touch.phase == TouchPhase.Stationary)
+                    {
+                        m_touchEndPosition = m_touch.position;
+
+                        float x = m_touchEndPosition.x - m_touchStartPosition.x;
+
+                        if (Mathf.Abs(x) >= 0.1f)
+                        {
+                            m_direction.y = Mathf.Clamp(x, -1f, 1f);
+                            m_child.transform.Translate(m_direction * m_speed * Time.deltaTime);
+                            if (Mathf.Abs(m_child.transform.localPosition.y) > (m_pathSize / 2) + m_errorMargin)
+                            {
+                                OnDeath();
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -112,6 +118,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnDeath()
     {
+        Debug.Log("Death");
         m_enableInput = false;
         m_follower.follow = false;
         m_rigidbody.useGravity = true;
