@@ -20,4 +20,12 @@ public class Obstacle : MonoBehaviour, IObstacle
     {
         
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        var player = collision.gameObject.GetComponentInParent<PlayerController>();
+        if(player != null)
+            player.OnDeath();
+        //OnCollision();
+    }
 }

@@ -19,8 +19,9 @@ public class DeathZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("You died");
-            //Death
+            var player = other.gameObject.GetComponentInParent<PlayerController>();
+            if (player != null)
+                player.OnDeath();
         }
     }
 
