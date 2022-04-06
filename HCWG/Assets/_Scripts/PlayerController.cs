@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Dreamteck.Splines;
 using UnityEngine;
-
+using UnityEngine.Events;
 public enum ControlType
 {
     HoldAndDrag,
@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_touchStartPosition, m_touchEndPosition;
     private Vector3 m_direction;
     private float m_pathSize;
+    public UnityEvent m_death;
+
+    public event UnityAction OnDeath { add => m_death.AddListener(value); remove => m_death.RemoveListener(value); }
 
     private RuntimePlatform appPlatform;
     // Start is called before the first frame update
@@ -46,6 +49,9 @@ public class PlayerController : MonoBehaviour
         Debug.Log(Application.platform);
     }
 
+    private void OnDestroy() {
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -57,7 +63,7 @@ public class PlayerController : MonoBehaviour
                 m_child.transform.Translate(m_direction * m_speed * Time.deltaTime);
                 if (Mathf.Abs(m_child.transform.localPosition.y) > (m_pathSize / 2) + m_errorMargin)
                 {
-                    OnDeath();
+                    Death();
                 } 
             }
         }
@@ -85,7 +91,7 @@ public class PlayerController : MonoBehaviour
                         m_child.transform.Translate(m_direction * m_speed * Time.deltaTime);
                         if (Mathf.Abs(m_child.transform.localPosition.y) > (m_pathSize / 2) + m_errorMargin)
                         {
-                            OnDeath();
+                            Death();
                         }
                     }
                 }
@@ -108,7 +114,7 @@ public class PlayerController : MonoBehaviour
                             m_child.transform.Translate(m_direction * m_speed * Time.deltaTime);
                             if (Mathf.Abs(m_child.transform.localPosition.y) > (m_pathSize / 2) + m_errorMargin)
                             {
-                                OnDeath();
+                                Death();
                             }
                         }
                     }
@@ -119,13 +125,13 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(m_follower.GetPercent());
     }
 
-    public void OnDeath()
+    public void Death()
     {
         Debug.Log("Death");
         m_enableInput = false;
         m_follower.follow = false;
         m_rigidbody.useGravity = true;
-        m_sceneHandler.RestartCurrentLevel(5f);
+        m_death?.Invoke();
     }
 
     public void OnReachEnd()

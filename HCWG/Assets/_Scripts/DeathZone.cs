@@ -21,7 +21,7 @@ public class DeathZone : MonoBehaviour
         {
             var player = other.gameObject.GetComponentInParent<PlayerController>();
             if (player != null)
-                player.OnDeath();
+                player.Death();
         }
     }
 

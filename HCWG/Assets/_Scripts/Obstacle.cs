@@ -28,7 +28,7 @@ public class Obstacle : MonoBehaviour, IObstacle
     {
         var player = collision.gameObject.GetComponentInParent<PlayerController>();
         if (player != null) {
-            player.OnDeath();
+            player.Death();
             OnCollision();
         }
     }
