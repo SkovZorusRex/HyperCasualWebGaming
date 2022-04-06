@@ -29,15 +29,15 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
         if (Mathf.Abs(percentage) >= percentThreshold)
         {
             Vector3 newLocation = panelLocation;
-            if (percentage > 0 && currentPage < totalPages)
+            if (percentage < 0 && currentPage < totalPages)
             {
                 currentPage++;
-                newLocation += new Vector3(0, -Screen.height, 0);
+                newLocation += new Vector3(0, Screen.height, 0);
             }
-            else if (percentage < 0 && currentPage > 1)
+            else if (percentage > 0 && currentPage > 1)
             {
                 currentPage--;
-                newLocation += new Vector3(0, Screen.height, 0);
+                newLocation += new Vector3(0, -Screen.height, 0);
             }
             StartCoroutine(SmoothMove(transform.position, newLocation, easing));
             panelLocation = newLocation;

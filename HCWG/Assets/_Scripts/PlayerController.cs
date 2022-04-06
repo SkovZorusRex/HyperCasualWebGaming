@@ -26,9 +26,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_touchStartPosition, m_touchEndPosition;
     private Vector3 m_direction;
     private float m_pathSize;
+
+    private RuntimePlatform appPlatform;
     // Start is called before the first frame update
     void Start()
     {
+        appPlatform = Application.platform;
         if (m_rigidbody == null)
             m_rigidbody = m_child.GetComponent<Rigidbody>();
         m_rigidbody.useGravity = false;
@@ -46,7 +49,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Application.platform == RuntimePlatform.WebGLPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+        if (appPlatform == RuntimePlatform.WebGLPlayer || appPlatform == RuntimePlatform.WindowsEditor)
         {
             if (m_enableInput)
             {

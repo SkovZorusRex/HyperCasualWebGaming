@@ -28,6 +28,7 @@ public class SceneHandler : MonoBehaviour
 
     public void LoadLevel(string sceneName)
     {
+        Debug.Log("Loading " + sceneName);
         SceneManager.LoadScene(sceneName);
     }
 }

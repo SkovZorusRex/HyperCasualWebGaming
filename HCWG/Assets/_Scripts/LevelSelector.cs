@@ -6,6 +6,7 @@ using TMPro;
 
 public class LevelSelector : MonoBehaviour
 {
+    public SceneHandler m_sceneHandler;
     public GameObject levelHolder;
     public GameObject levelIcon;
     public GameObject thisCanvas;
@@ -39,7 +40,8 @@ public class LevelSelector : MonoBehaviour
             panel.transform.SetParent(thisCanvas.transform, false);
             panel.transform.SetParent(levelHolder.transform);
             panel.name = "Page-" + i;
-            panel.GetComponent<RectTransform>().localPosition = new Vector2(panelDimensions.width * (i - 1), 0);
+            //panel.GetComponent<RectTransform>().localPosition = new Vector2(panelDimensions.width * (i - 1), 0);
+            panel.GetComponent<RectTransform>().localPosition = new Vector2(0, -panelDimensions.height * (i - 1));
             SetUpGrid(panel);
             int numberOfIcons = i == numberOfPanels ? numberOfLevels - currentLevelCount : amountPerPage;
             LoadIcons(numberOfIcons, panel);
@@ -63,6 +65,8 @@ public class LevelSelector : MonoBehaviour
             icon.transform.SetParent(parentObject.transform);
             icon.name = "Level " + i;
             icon.GetComponentInChildren<TextMeshProUGUI>().SetText("Level " + currentLevelCount);
+            Button button = icon.GetComponent<Button>();
+            button.onClick.AddListener(() => m_sceneHandler.LoadLevel(icon.name));
         }
     }
 }
