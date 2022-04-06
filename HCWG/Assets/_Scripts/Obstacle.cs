@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MoreMountains.Feedbacks;
 
 public class Obstacle : MonoBehaviour, IObstacle
 {
+    public MMFeedbacks hitFeedback;
     public void OnCollision()
     {
-        throw new System.NotImplementedException();
+        hitFeedback.PlayFeedbacks();
     }
 
     // Start is called before the first frame update
@@ -24,8 +26,9 @@ public class Obstacle : MonoBehaviour, IObstacle
     private void OnCollisionEnter(Collision collision)
     {
         var player = collision.gameObject.GetComponentInParent<PlayerController>();
-        if(player != null)
+        if (player != null) {
             player.OnDeath();
-        //OnCollision();
+            OnCollision();
+        }
     }
 }
