@@ -129,8 +129,8 @@ public class PlayerController : MonoBehaviour
     {
         m_follower.follow = false;
         m_rigidbody.useGravity = true;
+        m_rigidbody.isKinematic = true;
         m_child.transform.parent = null;
         m_child.transform.rotation = Quaternion.identity;
-        m_rigidbody.AddForce(new Vector3(1,0,1) * 10, ForceMode.Impulse);
     }
 }
