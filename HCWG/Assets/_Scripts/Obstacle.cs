@@ -9,6 +9,7 @@ public class Obstacle : MonoBehaviour, IObstacle
     public void OnCollision()
     {
         hitFeedback.PlayFeedbacks();
+        Handheld.Vibrate();
     }
 
     // Start is called before the first frame update

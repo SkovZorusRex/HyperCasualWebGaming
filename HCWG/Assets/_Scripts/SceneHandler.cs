@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class SceneHandler : MonoBehaviour
 {
-
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
     public void RestartCurrentLevel(float delay)
     {
         StartCoroutine(Delay());

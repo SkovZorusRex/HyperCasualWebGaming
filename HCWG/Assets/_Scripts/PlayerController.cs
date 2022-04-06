@@ -134,6 +134,7 @@ public class PlayerController : MonoBehaviour
         m_rigidbody.useGravity = true;
         m_rigidbody.isKinematic = true;
         m_child.transform.parent = null;
+        m_enableInput = false;
         m_child.transform.rotation = Quaternion.identity;
     }
 }
