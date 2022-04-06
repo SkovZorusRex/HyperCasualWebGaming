@@ -25,7 +25,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void OnEndDrag(PointerEventData data)
     {
-        float percentage = (data.pressPosition.y - data.position.y) / Screen.width;
+        float percentage = (data.pressPosition.y - data.position.y) / Screen.height;
         if (Mathf.Abs(percentage) >= percentThreshold)
         {
             Vector3 newLocation = panelLocation;

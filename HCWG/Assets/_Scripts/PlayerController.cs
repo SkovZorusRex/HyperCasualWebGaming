@@ -49,7 +49,8 @@ public class PlayerController : MonoBehaviour
         Debug.Log(Application.platform);
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
     }
 
     // Update is called once per frame
@@ -64,7 +65,7 @@ public class PlayerController : MonoBehaviour
                 if (Mathf.Abs(m_child.transform.localPosition.y) > (m_pathSize / 2) + m_errorMargin)
                 {
                     Death();
-                } 
+                }
             }
         }
         else if (Application.platform == RuntimePlatform.Android)
@@ -128,6 +129,9 @@ public class PlayerController : MonoBehaviour
     public void Death()
     {
         Debug.Log("Death");
+        var IsVibrationOn = PlayerPrefs.GetInt("Vibration");
+        if (IsVibrationOn == 0)
+            Handheld.Vibrate();
         m_enableInput = false;
         m_follower.follow = false;
         m_rigidbody.useGravity = true;
@@ -142,5 +146,6 @@ public class PlayerController : MonoBehaviour
         m_child.transform.parent = null;
         m_enableInput = false;
         m_child.transform.rotation = Quaternion.identity;
+        PlayerPrefs.SetInt("CompletedLevel", PlayerPrefs.GetInt("CompletedLevel") + 1);
     }
 }

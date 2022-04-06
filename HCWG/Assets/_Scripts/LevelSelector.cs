@@ -16,17 +16,19 @@ public class LevelSelector : MonoBehaviour
     private Rect iconDimensions;
     private int amountPerPage;
     private int currentLevelCount;
+    [SerializeField] private Sprite completedLevelSprite;
 
     // Start is called before the first frame update
     void Start()
     {
-        panelDimensions = levelHolder.GetComponent<RectTransform>().rect;
-        iconDimensions = levelIcon.GetComponent<RectTransform>().rect;
-        int maxInARow = Mathf.FloorToInt((panelDimensions.width + iconSpacing.x) / (iconDimensions.width + iconSpacing.x));
-        int maxInACol = Mathf.FloorToInt((panelDimensions.height + iconSpacing.y) / (iconDimensions.height + iconSpacing.y));
-        amountPerPage = maxInARow * maxInACol;
-        int totalPages = Mathf.CeilToInt((float)numberOfLevels / amountPerPage);
-        LoadPanels(totalPages);
+        LoadButtons();
+        //panelDimensions = levelHolder.GetComponent<RectTransform>().rect;
+        //iconDimensions = levelIcon.GetComponent<RectTransform>().rect;
+        //int maxInARow = Mathf.FloorToInt((panelDimensions.width + iconSpacing.x) / (iconDimensions.width + iconSpacing.x));
+        //int maxInACol = Mathf.FloorToInt((panelDimensions.height + iconSpacing.y) / (iconDimensions.height + iconSpacing.y));
+        //amountPerPage = maxInARow * maxInACol;
+        //int totalPages = Mathf.CeilToInt((float)numberOfLevels / amountPerPage);
+        //LoadPanels(totalPages);
     }
     void LoadPanels(int numberOfPanels)
     {
@@ -67,6 +69,22 @@ public class LevelSelector : MonoBehaviour
             icon.GetComponentInChildren<TextMeshProUGUI>().SetText("Level " + currentLevelCount);
             Button button = icon.GetComponent<Button>();
             button.onClick.AddListener(() => m_sceneHandler.LoadLevel(icon.name));
+        }
+    }
+
+    void LoadButtons()
+    {
+        int i = 1;
+        var nbLevelCompleted = PlayerPrefs.GetInt("CompletedLevel");
+        foreach (Transform child in levelHolder.transform)
+        {
+            child.name = "Level " + i;
+            child.GetComponentInChildren<TextMeshProUGUI>().SetText("" + i);
+            if (i <= nbLevelCompleted)
+                child.GetComponentInChildren<Image>().sprite = completedLevelSprite;
+            Button button = child.GetComponent<Button>();
+            button.onClick.AddListener(() => m_sceneHandler.LoadLevel(child.name));
+            ++i;
         }
     }
 }
