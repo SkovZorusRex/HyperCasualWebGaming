@@ -24,7 +24,6 @@ public class LevelSelector : MonoBehaviour
     void Start()
     {
         LoadButtons();
-        PlayCompletedLevelFeedback(null);
         //panelDimensions = levelHolder.GetComponent<RectTransform>().rect;
         //iconDimensions = levelIcon.GetComponent<RectTransform>().rect;
         //int maxInARow = Mathf.FloorToInt((panelDimensions.width + iconSpacing.x) / (iconDimensions.width + iconSpacing.x));
@@ -86,6 +85,8 @@ public class LevelSelector : MonoBehaviour
             if (i <= nbLevelCompleted)
             {
                 child.GetComponentInChildren<Image>().sprite = completedLevelSprite;
+                if (i == nbLevelCompleted)
+                    PlayCompletedLevelFeedback(child);
             }
             Button button = child.GetComponent<Button>();
             button.onClick.AddListener(() => m_sceneHandler.LoadLevel(child.name));
@@ -93,11 +94,22 @@ public class LevelSelector : MonoBehaviour
         }
     }
 
-    private void PlayCompletedLevelFeedback(GameObject target)
+    private void PlayCompletedLevelFeedback(Transform target)
     {
         foreach (var feedback in mMFeedbacks.Feedbacks)
         {
-            Debug.Log(feedback.GetType());
+            var fb = feedback as MMFeedbackRotation;
+            if(fb != null)
+            {
+                fb.AnimateRotationTarget = target;
+            }
+            var fb1 = feedback as MMFeedbackScale;
+            if(fb1 != null)
+            {
+                fb1.AnimateScaleTarget = target;
+            }
         }
+
+        mMFeedbacks.PlayFeedbacks();
     }
 }
