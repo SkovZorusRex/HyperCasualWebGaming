@@ -146,6 +146,7 @@ public class PlayerController : MonoBehaviour
         m_child.transform.parent = null;
         m_enableInput = false;
         m_child.transform.rotation = Quaternion.identity;
-        PlayerPrefs.SetInt("CompletedLevel", PlayerPrefs.GetInt("CompletedLevel") + 1);
+        if(PlayerPrefs.GetInt("CompletedLevel") < m_sceneHandler.GetCurrentLevelNB() - 1)
+            PlayerPrefs.SetInt("CompletedLevel", PlayerPrefs.GetInt("CompletedLevel") + 1);
     }
 }

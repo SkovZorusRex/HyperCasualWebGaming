@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using MoreMountains.Feedbacks;
 
 public class LevelSelector : MonoBehaviour
 {
@@ -17,11 +18,13 @@ public class LevelSelector : MonoBehaviour
     private int amountPerPage;
     private int currentLevelCount;
     [SerializeField] private Sprite completedLevelSprite;
+    [SerializeField] private MMFeedbacks mMFeedbacks;
 
     // Start is called before the first frame update
     void Start()
     {
         LoadButtons();
+        PlayCompletedLevelFeedback(null);
         //panelDimensions = levelHolder.GetComponent<RectTransform>().rect;
         //iconDimensions = levelIcon.GetComponent<RectTransform>().rect;
         //int maxInARow = Mathf.FloorToInt((panelDimensions.width + iconSpacing.x) / (iconDimensions.width + iconSpacing.x));
@@ -81,10 +84,20 @@ public class LevelSelector : MonoBehaviour
             child.name = "Level " + i;
             child.GetComponentInChildren<TextMeshProUGUI>().SetText("" + i);
             if (i <= nbLevelCompleted)
+            {
                 child.GetComponentInChildren<Image>().sprite = completedLevelSprite;
+            }
             Button button = child.GetComponent<Button>();
             button.onClick.AddListener(() => m_sceneHandler.LoadLevel(child.name));
             ++i;
+        }
+    }
+
+    private void PlayCompletedLevelFeedback(GameObject target)
+    {
+        foreach (var feedback in mMFeedbacks.Feedbacks)
+        {
+            Debug.Log(feedback.GetType());
         }
     }
 }

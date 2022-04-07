@@ -93,4 +93,9 @@ public class SceneHandler : MonoBehaviour
             PlayerPrefs.SetInt("Sound", 0);
         }
     }
+
+    public int GetCurrentLevelNB()
+    {
+        return SceneManager.GetActiveScene().buildIndex;
+    }
 }
